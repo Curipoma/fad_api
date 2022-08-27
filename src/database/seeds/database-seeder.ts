@@ -9,8 +9,8 @@ export class DatabaseSeeder {
     private usersSeeder: UsersSeeder,
   ) {}
 
-  run() {
+  async run() {
     this.cataloguesSeeder.run();
-    this.usersSeeder.run();
+    await this.usersSeeder.run();
   }
 }

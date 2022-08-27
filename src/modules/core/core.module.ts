@@ -1,14 +1,53 @@
 import { Global, Module } from '@nestjs/common';
-import { CataloguesController } from '@core/controllers';
-import { CataloguesService } from '@core/services';
+import {
+  AssetDetailsController,
+  AssetsController,
+  CataloguesController,
+  CatalogueTypesController,
+  ConsumablesController,
+  MaterialsController,
+} from '@core/controllers';
+import {
+  AssetDetailsService,
+  AssetsService,
+  CataloguesService,
+  CatalogueTypesService,
+  ConsumablesService,
+  MaterialsService,
+} from '@core/services';
 import { DatabaseModule } from '@database';
 import { coreProviders } from '@core/providers';
 
 @Global()
 @Module({
   imports: [DatabaseModule],
-  controllers: [CataloguesController],
-  providers: [...coreProviders, CataloguesService],
-  exports: [CataloguesService],
+  controllers: [
+    AssetDetailsController,
+    AssetsController,
+    CatalogueTypesController,
+    CataloguesController,
+    ConsumablesController,
+    MaterialsController,
+  ],
+  providers: [
+    ...coreProviders,
+    AssetDetailsService,
+    AssetsService,
+    CatalogueTypesService,
+    CataloguesService,
+    ConsumablesService,
+    MaterialsService,
+  ],
+  exports: [
+    ...coreProviders,
+    AssetDetailsService,
+    AssetsService,
+    CatalogueTypesService,
+    CataloguesService,
+    ConsumablesService,
+    MaterialsService,
+  ],
 })
 export class CoreModule {}
+
+// todo agregar la asignación de fk en cada servicio =< luego probar

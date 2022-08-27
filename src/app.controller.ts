@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { DatabaseSeeder } from '@database';
 import { ResponseHttpModel } from '@shared/models';
@@ -13,11 +13,12 @@ export class AppController {
   ) {}
 
   @Get('init')
-  async init(): Promise<ResponseHttpModel> {
+  @ApiOperation({ summary: 'start the application' })
+  async init(): Promise<ResponseHttpModel<object>> {
     await this.databaseSeeder.run();
 
     return {
-      data: true,
+      data: { initialized: true },
       message: 'application initialized successfully',
       title: 'API FAD - initialized',
     };

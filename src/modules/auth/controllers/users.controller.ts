@@ -24,18 +24,18 @@ import { AppRoles } from '../../../app.roles';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  // @Auth({ possession: 'any', action: 'create', resource: AppResource.USER })
   @ApiOperation({ summary: 'Create User' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() payload: CreateUserDto): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.usersService.create({
+  async create(
+    @Body() payload: CreateUserDto,
+  ): Promise<ResponseHttpModel<UserEntity>> {
+    const { data } = await this.usersService.create({
       ...payload,
-      // roles: [AppRoles.ADMIN],
     });
 
     return {
-      data: serviceResponse.data,
+      data,
       message: 'User created',
       title: 'Created',
     };
@@ -44,12 +44,14 @@ export class UsersController {
   @ApiOperation({ summary: 'List of users' })
   @Get()
   @HttpCode(HttpStatus.OK)
-  async findAll(@Query() params: FilterUserDto): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.usersService.findAll(params);
+  async findAll(
+    @Query() params: FilterUserDto,
+  ): Promise<ResponseHttpModel<UserEntity[]>> {
+    const { data, pagination } = await this.usersService.findAll(params);
 
     return {
-      data: serviceResponse.data,
-      pagination: serviceResponse.pagination,
+      data,
+      pagination,
       message: `index`,
       title: 'Success',
     };
@@ -60,11 +62,11 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.usersService.findOne(id);
+  ): Promise<ResponseHttpModel<UserEntity>> {
+    const { data } = await this.usersService.findOne(id);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: `show ${id}`,
       title: `Success`,
     };
@@ -76,11 +78,11 @@ export class UsersController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() payload: UpdateUserDto,
-  ): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.usersService.update(id, payload);
+  ): Promise<ResponseHttpModel<UserEntity>> {
+    const { data } = await this.usersService.update(id, payload);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: `User updated ${id}`,
       title: `Updated`,
     };
@@ -91,11 +93,11 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   async remove(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.usersService.remove(id);
+  ): Promise<ResponseHttpModel<UserEntity>> {
+    const { data } = await this.usersService.remove(id);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: `User deleted ${id}`,
       title: `Deleted`,
     };
@@ -104,11 +106,13 @@ export class UsersController {
   @ApiOperation({ summary: 'Remove All Users' })
   @Patch('remove-all')
   @HttpCode(HttpStatus.CREATED)
-  async removeAll(@Body() payload: UserEntity[]): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.usersService.removeAll(payload);
+  async removeAll(
+    @Body() payload: number[],
+  ): Promise<ResponseHttpModel<UserEntity[]>> {
+    const { data } = await this.usersService.removeAll(payload);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: `Users deleted`,
       title: `Deleted`,
     };

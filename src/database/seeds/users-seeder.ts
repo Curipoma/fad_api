@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '@auth/dto';
 import { UsersService } from '@auth/services';
-import { UserEntity } from '@auth/entities';
 
 @Injectable()
 export class UsersSeeder {
   constructor(private usersService: UsersService) {}
 
-  run() {
-    this.createUsers();
+  async run() {
+    await this.createDefaultUser();
   }
 
-  createUsers() {
+  async createDefaultUser() {
     const users: CreateUserDto[] = [];
     users.push({
       email: 'dev@fad.dev',
@@ -19,10 +18,11 @@ export class UsersSeeder {
       name: 'Alvaro',
       password: '1234567890',
       passwordChanged: false,
-      username: 'Alvarito',
-    } as UserEntity);
+    } as CreateUserDto);
+
+    await this.usersService.truncateTable();
     users.forEach((user) => {
-      this.usersService.create(user)
+      this.usersService.create(user);
     });
   }
 }

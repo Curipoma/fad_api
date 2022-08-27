@@ -5,9 +5,7 @@ import {
   IsNotEmpty,
   MinLength,
   IsEmail,
-  IsArray,
   MaxLength,
-  IsDate,
 } from 'class-validator';
 import {
   isBooleanValidationOptions,
@@ -17,7 +15,6 @@ import {
   maxLengthValidationOptions,
   minLengthValidationOptions,
 } from '@shared/validation';
-import { CatalogueEntity } from '@core/entities';
 
 export class UserDto {
   @IsNotEmpty(isNotEmptyValidationOptions())
@@ -45,21 +42,10 @@ export class UserDto {
   readonly passwordChanged: boolean;
 
   @IsOptional()
-  @IsEmail({}, isEmailValidationOptions())
-  @MaxLength(150, maxLengthValidationOptions())
-  readonly personalEmail: string;
-
-  @IsOptional()
   @MaxLength(20, minLengthValidationOptions())
   readonly phone: string;
 
   @IsNotEmpty(isNotEmptyValidationOptions())
   @IsString(isStringValidationOptions())
   readonly name: string;
-
-  @IsNotEmpty(isNotEmptyValidationOptions())
-  @IsString()
-  @MinLength(5, minLengthValidationOptions())
-  @MaxLength(20, maxLengthValidationOptions())
-  readonly username: string;
 }

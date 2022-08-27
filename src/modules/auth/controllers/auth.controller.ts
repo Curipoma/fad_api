@@ -26,11 +26,11 @@ export class AuthController {
   @PublicRoute()
   @Post('login')
   @HttpCode(HttpStatus.CREATED)
-  async login(@Body() payload: LoginDto): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.authService.login(payload);
+  async login(@Body() payload: LoginDto): Promise<ResponseHttpModel<object>> {
+    const { data } = await this.authService.login(payload);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: 'Correct Access',
       title: 'Welcome',
     };
@@ -42,11 +42,11 @@ export class AuthController {
   async changePassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() payload: PasswordChangeDto,
-  ): Promise<ResponseHttpModel> {
-    const serviceResponse = await this.authService.changePassword(id, payload);
+  ): Promise<ResponseHttpModel<object>> {
+    const { data } = await this.authService.changePassword(id, payload);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: 'The password was changed',
       title: 'Password Changed',
     };
@@ -55,11 +55,13 @@ export class AuthController {
   @ApiOperation({ summary: 'Refresh Token' })
   @Get('refresh-token')
   @HttpCode(HttpStatus.CREATED)
-  refreshToken(@User() user: UserEntity) {
-    const serviceResponse = this.authService.refreshToken(user);
+  async refreshToken(
+    @User() user: UserEntity,
+  ): Promise<ResponseHttpModel<object>> {
+    const { data } = await this.authService.refreshToken(user);
 
     return {
-      data: serviceResponse.data,
+      data,
       message: 'Correct Access',
       title: 'Welcome',
     };

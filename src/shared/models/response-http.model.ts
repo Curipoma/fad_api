@@ -1,8 +1,10 @@
-export interface ResponseHttpModel {
-  data: object | boolean;
+import { PaginationDto } from '@core/dto';
+
+export interface ResponseHttpModel<D> {
+  data: D;
   message: string | string[];
   title: string;
-  pagination?: any;
+  pagination?: PaginationDto;
 }
 
 export interface ErrorResponseHttpModel {

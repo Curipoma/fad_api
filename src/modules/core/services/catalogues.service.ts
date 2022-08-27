@@ -8,44 +8,50 @@ import {
 } from '@core/dto';
 import { CatalogueEntity } from '@core/entities';
 import { RepositoryEnum } from '@shared/enums';
+import { ServiceResponseHttpModel } from '@shared/models';
+import { CatalogueTypesService } from './catalogue-types.service';
 
 @Injectable()
 export class CataloguesService {
   constructor(
     @Inject(RepositoryEnum.CATALOGUE_REPOSITORY)
     private repository: Repository<CatalogueEntity>,
+    private catalogueTypesService: CatalogueTypesService,
   ) {}
 
-  async create(payload: CreateCatalogueDto) {
-    const newCatalogue = this.repository.create(payload);
+  async create(
+    payload: CreateCatalogueDto,
+  ): Promise<ServiceResponseHttpModel<CatalogueEntity>> {
+    const newCatalogue = await this.repository.create(payload);
+
+    await this.catalogueTypesService.findOne(payload.type.id).then((res) => {
+      newCatalogue.type = res.data;
+    });
 
     const catalogueCreated = await this.repository.save(newCatalogue);
 
-    return await this.repository.save(catalogueCreated);
+    return { data: catalogueCreated };
   }
 
-  async catalogue() {
-    const data = await this.repository.findAndCount({
-      take: 1000,
-    });
-
-    return { pagination: { totalItems: data[1], limit: 1000 }, data: data[0] };
-  }
-
-  async findAll(params?: FilterCatalogueDto) {
-    //Pagination & Filter by search
-    if (params) {
+  async findAll(
+    params?: FilterCatalogueDto,
+  ): Promise<ServiceResponseHttpModel<CatalogueEntity[]>> {
+    if (params.limit > 0 && params.page >= 0) {
       return await this.paginateAndFilter(params);
     }
 
-    //All
-    const data = await this.repository.findAndCount();
+    const data = await this.repository.findAndCount({
+      relations: ['type'],
+    });
 
-    return { pagination: { totalItems: data[1], limit: 10 }, data: data[0] };
+    return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 
-  async findOne(id: number) {
+  async findOne(
+    id: number,
+  ): Promise<ServiceResponseHttpModel<CatalogueEntity>> {
     const catalogue = await this.repository.findOne({
+      relations: ['type'],
       where: { id },
     });
 
@@ -53,22 +59,31 @@ export class CataloguesService {
       throw new NotFoundException('Catalogue not found');
     }
 
-    return catalogue;
+    return { data: catalogue };
   }
 
-  async update(id: number, payload: UpdateCatalogueDto) {
+  async update(
+    id: number,
+    payload: UpdateCatalogueDto,
+  ): Promise<ServiceResponseHttpModel<CatalogueEntity>> {
     const catalogue = await this.repository.findOneBy({ id });
 
     if (!catalogue) {
       throw new NotFoundException('Catalogue not found');
     }
 
-    this.repository.merge(catalogue, payload);
+    await this.catalogueTypesService.findOne(payload.type.id).then((res) => {
+      catalogue.type = res.data;
+    });
 
-    return this.repository.save(catalogue);
+    await this.repository.merge(catalogue, payload);
+
+    const catalogueCreated = await this.repository.save(catalogue);
+
+    return { data: catalogueCreated };
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<ServiceResponseHttpModel<CatalogueEntity>> {
     const catalogue = await this.repository.findOneBy({ id });
 
     if (!catalogue) {
@@ -76,20 +91,25 @@ export class CataloguesService {
     }
 
     await this.repository.softDelete(id);
-    return true;
+
+    return { data: catalogue };
   }
 
-  async removeAll(payload: any) {
-    const catalogues = await this.repository.findBy({ id: In(payload.ids) });
+  async removeAll(
+    payload: number[],
+  ): Promise<ServiceResponseHttpModel<CatalogueEntity[]>> {
+    const catalogues = await this.repository.findBy({ id: In(payload) });
 
     for (const catalogue of catalogues) {
       await this.repository.softDelete(catalogue.id);
     }
 
-    return true;
+    return { data: catalogues };
   }
 
-  private async paginateAndFilter(params: FilterCatalogueDto) {
+  private async paginateAndFilter(
+    params: FilterCatalogueDto,
+  ): Promise<ServiceResponseHttpModel<CatalogueEntity[]>> {
     let where:
       | FindOptionsWhere<CatalogueEntity>
       | FindOptionsWhere<CatalogueEntity>[];
@@ -105,11 +125,12 @@ export class CataloguesService {
     }
 
     const data = await this.repository.findAndCount({
+      relations: ['type'],
       where,
       take: limit,
       skip: PaginationDto.getOffset(limit, page),
     });
 
-    return { pagination: { limit, totalItems: data[1] }, data: data[0] };
+    return { data: data[0], pagination: { totalItems: data[1], limit } };
   }
 }

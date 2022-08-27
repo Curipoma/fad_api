@@ -20,7 +20,7 @@ import { DatabaseModule } from '@database';
         return {
           secret: configService.jwtSecret,
           signOptions: {
-            expiresIn: '10d',
+            expiresIn: '1d',
           },
         };
       },

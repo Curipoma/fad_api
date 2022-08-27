@@ -7,5 +7,4 @@ export class CreateUserDto extends PickType(UserDto, [
   'name',
   'password',
   'passwordChanged',
-  'username',
 ]) {}

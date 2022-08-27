@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { Repository, FindOptionsWhere, ILike, LessThan } from 'typeorm';
+import { Repository, FindOptionsWhere, ILike, LessThan, In } from 'typeorm';
 import {
   CreateUserDto,
   FilterUserDto,
@@ -11,80 +11,94 @@ import { UserEntity } from '@auth/entities';
 import { PaginationDto } from '@core/dto';
 import { ServiceResponseHttpModel } from '@shared/models';
 import { RepositoryEnum } from '@shared/enums';
+import { TableNames } from '@auth/enums';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(RepositoryEnum.USER_REPOSITORY)
-    private userRepository: Repository<UserEntity>,
+    private repository: Repository<UserEntity>,
   ) {}
 
-  async create(payload: CreateUserDto): Promise<ServiceResponseHttpModel> {
-    const newUser = this.userRepository.create(payload);
-    const userCreated = await this.userRepository.save(newUser);
-
-    return { data: plainToInstance(ReadUserDto, userCreated) };
+  async truncateTable() {
+    await this.repository.query(
+      `TRUNCATE ${TableNames.USERS} RESTART IDENTITY CASCADE;`,
+    );
   }
 
-  async findAll(params?: FilterUserDto): Promise<ServiceResponseHttpModel> {
+  async create(
+    payload: CreateUserDto,
+  ): Promise<ServiceResponseHttpModel<UserEntity>> {
+    const newUser = await this.repository.create(payload);
+    const userCreated = await this.repository.save(newUser);
+
+    return { data: userCreated };
+  }
+
+  async findAll(
+    params?: FilterUserDto,
+  ): Promise<ServiceResponseHttpModel<UserEntity[]>> {
     if (params.limit > 0 && params.page >= 0) {
       return await this.paginateAndFilter(params);
     }
 
-    const response = await this.userRepository.findAndCount();
+    const data = await this.repository.findAndCount();
 
-    return {
-      data: plainToInstance(ReadUserDto, response[0]),
-      pagination: { totalItems: response[1], limit: 10 },
-    };
+    return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 
-  async findOne(id: string): Promise<ServiceResponseHttpModel> {
-    const user = await this.userRepository.findOneBy({ id });
+  async findOne(id: string): Promise<ServiceResponseHttpModel<UserEntity>> {
+    const user = await this.repository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    return { data: plainToInstance(ReadUserDto, user) };
+    return { data: user };
   }
 
   async update(
     id: string,
     payload: UpdateUserDto,
-  ): Promise<ServiceResponseHttpModel> {
-    const user = await this.userRepository.preload({ id, ...payload });
+  ): Promise<ServiceResponseHttpModel<UserEntity>> {
+    const user = await this.repository.preload({ id, ...payload });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // this.userRepository.merge(user, payload);
-    const userUpdated = await this.userRepository.save(user);
+    await this.repository.merge(user, payload);
+    const userUpdated = await this.repository.save(user);
 
-    return { data: plainToInstance(ReadUserDto, userUpdated) };
+    return { data: userUpdated };
   }
 
-  async remove(id: string): Promise<ServiceResponseHttpModel> {
-    const user = await this.userRepository.findOneBy({ id });
+  async remove(id: string): Promise<ServiceResponseHttpModel<UserEntity>> {
+    const user = await this.repository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const userDeleted = await this.userRepository.softRemove(user);
+    await this.repository.softRemove(user);
 
-    return { data: plainToInstance(ReadUserDto, userDeleted) };
+    return { data: user };
   }
 
-  async removeAll(payload: UserEntity[]): Promise<ServiceResponseHttpModel> {
-    const usersDeleted = await this.userRepository.softRemove(payload);
-    return { data: usersDeleted };
+  async removeAll(
+    payload: number[],
+  ): Promise<ServiceResponseHttpModel<UserEntity[]>> {
+    const users = await this.repository.findBy({ id: In(payload) });
+
+    for (const user of users) {
+      await this.repository.softDelete(user.id);
+    }
+    return { data: users };
   }
 
   private async paginateAndFilter(
     params: FilterUserDto,
-  ): Promise<ServiceResponseHttpModel> {
+  ): Promise<ServiceResponseHttpModel<UserEntity[]>> {
     let where: FindOptionsWhere<UserEntity> | FindOptionsWhere<UserEntity>[];
     where = {};
     let { page, search } = params;
@@ -96,18 +110,14 @@ export class UsersService {
       where = [];
       where.push({ lastname: ILike(`%${search}%`) });
       where.push({ name: ILike(`%${search}%`) });
-      where.push({ username: ILike(`%${search}%`) });
     }
 
-    const response = await this.userRepository.findAndCount({
+    const data = await this.repository.findAndCount({
       where,
       take: limit,
       skip: PaginationDto.getOffset(limit, page),
     });
 
-    return {
-      data: plainToInstance(ReadUserDto, response[0]),
-      pagination: { limit, totalItems: response[1] },
-    };
+    return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 }

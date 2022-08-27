@@ -7,14 +7,14 @@ import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-prop
 
 export class LoginDto {
   @ApiModelProperty({
-    description: 'username, must be valid (Alvarito default)',
+    description: 'username, must be valid',
   })
   @IsString(isStringValidationOptions())
   @IsNotEmpty(isNotEmptyValidationOptions())
-  username: string;
+  email: string;
 
   @ApiModelProperty({
-    description: 'password, must be valid (1324567890 default)',
+    description: 'password, must be valid',
   })
   @IsString(isStringValidationOptions())
   @IsNotEmpty()

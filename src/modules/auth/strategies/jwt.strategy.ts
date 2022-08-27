@@ -26,8 +26,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     if (!user) throw new UnauthorizedException('Token is not valid.');
 
-    if (user.suspendedAt) throw new UnauthorizedException('User is suspended.');
-
     if (user.maxAttempts === 0)
       throw new UnauthorizedException('User is suspended.');
 

@@ -42,18 +42,14 @@ export class AuthService {
 
     await this.repository.save(user);
 
-    return { data: true };
+    return { data: { changePassword: true } };
   }
 
   async login(payload: LoginDto) {
-    const user = await this.findByUsername(payload.username);
+    const user = await this.findUserForLogin(payload.email);
 
     if (!user || !(await this.checkPassword(payload.password, user))) {
       throw new UnauthorizedException('Wrong username and/or password.');
-    }
-
-    if (user.suspendedAt) {
-      throw new UnauthorizedException('User is suspended.');
     }
 
     const accessToken = this.generateJwt(user);
@@ -61,7 +57,7 @@ export class AuthService {
     return { data: { accessToken, user } };
   }
 
-  refreshToken(user: UserEntity) {
+  async refreshToken(user: UserEntity) {
     const accessToken = this.generateJwt(user);
 
     return { data: { accessToken, user } };
@@ -72,10 +68,10 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  private async findByUsername(username: string) {
+  private async findUserForLogin(email: string) {
     return await this.repository.findOne({
       where: {
-        username,
+        email,
       },
     });
   }

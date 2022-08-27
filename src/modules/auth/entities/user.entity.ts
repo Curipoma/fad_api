@@ -2,9 +2,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Entity,
-  OneToOne,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
@@ -13,9 +10,9 @@ import {
 } from 'typeorm';
 import * as Bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
-import { CatalogueEntity } from '@core/entities';
+import { TableNames } from '@auth/enums';
 
-@Entity('users', { schema: 'auth' })
+@Entity(TableNames.USERS, { schema: 'auth' })
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -75,14 +72,6 @@ export class UserEntity {
   passwordChanged: boolean;
 
   @Column('varchar', {
-    name: 'personal_email',
-    length: 150,
-    nullable: true,
-    comment: 'Correo Electronico Personal',
-  })
-  personalEmail: string;
-
-  @Column('varchar', {
     name: 'phone',
     length: 20,
     nullable: true,
@@ -101,20 +90,6 @@ export class UserEntity {
 
   @Column('varchar', { name: 'name', length: 255, comment: 'Nombres' })
   name: string;
-
-  @Column('timestamp', {
-    name: 'suspended_at',
-    nullable: true,
-    comment: 'Fecha de la ultima suspension del usuario',
-  })
-  suspendedAt: Date;
-
-  @Column('varchar', {
-    name: 'username',
-    length: 100,
-    comment: 'Nombre de usuario para ingreso al sistema',
-  })
-  username: string;
 
   @BeforeInsert()
   @BeforeUpdate()
