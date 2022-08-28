@@ -9,6 +9,7 @@ import {
 import { CatalogueTypeEntity } from '@core/entities';
 import { RepositoryEnum } from '@shared/enums';
 import { ServiceResponseHttpModel } from '@shared/models';
+import { TableNames } from '@auth/enums';
 
 @Injectable()
 export class CatalogueTypesService {
@@ -16,6 +17,12 @@ export class CatalogueTypesService {
     @Inject(RepositoryEnum.CATALOGUE_TYPE_REPOSITORY)
     private repository: Repository<CatalogueTypeEntity>,
   ) {}
+
+  async truncateTable() {
+    await this.repository.query(
+      `TRUNCATE core.${TableNames.CATALOGUE_TYPES} RESTART IDENTITY CASCADE;`,
+    );
+  }
 
   async create(
     payload: CreateCatalogueTypesDto,
@@ -47,7 +54,7 @@ export class CatalogueTypesService {
     });
 
     if (!catalogueType) {
-      throw new NotFoundException('Catalogue type not found');
+      throw new NotFoundException(`Catalogue type ${id} not found`);
     }
 
     return { data: catalogueType };

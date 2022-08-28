@@ -22,7 +22,7 @@ export class AssetDetailsService {
 
   async truncateTable() {
     await this.repository.query(
-      `TRUNCATE ${TableNames.ASSET_DETAILS} RESTART IDENTITY CASCADE;`,
+      `TRUNCATE core.${TableNames.ASSET_DETAILS} RESTART IDENTITY CASCADE;`,
     );
   }
 

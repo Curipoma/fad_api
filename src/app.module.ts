@@ -6,7 +6,7 @@ import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { roles } from './app.roles';
-import { enviroments } from './enviroments';
+import { environments } from './environments';
 import { config } from '@config';
 import { AuthModule } from '@auth/modules';
 import { CoreModule } from '@core/modules';
@@ -14,7 +14,7 @@ import { CoreModule } from '@core/modules';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: enviroments[process.env.NODE_ENV] || '.env',
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
       isGlobal: true,
       load: [config],
       validationSchema: Joi.object({

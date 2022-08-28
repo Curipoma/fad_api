@@ -1,12 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
 import { Repository, FindOptionsWhere, ILike, LessThan, In } from 'typeorm';
-import {
-  CreateUserDto,
-  FilterUserDto,
-  ReadUserDto,
-  UpdateUserDto,
-} from '@auth/dto';
+import { CreateUserDto, FilterUserDto, UpdateUserDto } from '@auth/dto';
 import { UserEntity } from '@auth/entities';
 import { PaginationDto } from '@core/dto';
 import { ServiceResponseHttpModel } from '@shared/models';
@@ -22,7 +16,7 @@ export class UsersService {
 
   async truncateTable() {
     await this.repository.query(
-      `TRUNCATE ${TableNames.USERS} RESTART IDENTITY CASCADE;`,
+      `TRUNCATE auth.${TableNames.USERS} RESTART IDENTITY CASCADE;`,
     );
   }
 

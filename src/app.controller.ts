@@ -19,7 +19,7 @@ export class AppController {
 
     return {
       data: { initialized: true },
-      message: 'application initialized successfully',
+      message: 'Application initialized successfully',
       title: 'API FAD - initialized',
     };
   }
