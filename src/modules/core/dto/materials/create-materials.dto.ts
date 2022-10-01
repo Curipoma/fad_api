@@ -17,12 +17,12 @@ export class CreateMaterialsDto {
   readonly type: CatalogueEntity;
 
   @IsString({ message: 'code, Debe ser un string' })
-  @MinLength(3, { message: 'code, El número de caracteres mínimo es 3.' })
+  @MinLength(1, { message: 'code, El número de caracteres mínimo es 3.' })
   @MaxLength(255, { message: 'code, Maximo 255 caracteres' })
   readonly code: string;
 
   @IsString({ message: 'name, Debe ser un string' })
-  @MinLength(3, { message: 'name, El número de caracteres mínimo es 3.' })
+  @MinLength(1, { message: 'name, El número de caracteres mínimo es 3.' })
   @MaxLength(255, { message: 'name, Maximo 255 caracteres' })
   readonly name: string;
 
