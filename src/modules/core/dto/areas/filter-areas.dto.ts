@@ -2,10 +2,14 @@ import { IsOptional, IsString } from 'class-validator';
 import { PartialType } from '@nestjs/swagger';
 import { PaginationDto } from '@core/dto';
 
-export class FilterConsumablesDto extends PartialType(PaginationDto) {
+export class FilterAreasDto extends PartialType(PaginationDto) {
   @IsOptional()
   @IsString()
-  readonly amount: string;
+  readonly name: string;
+
+  @IsOptional()
+  @IsString()
+  readonly unitValue: string;
 
   @IsOptional()
   @IsString()
@@ -13,13 +17,5 @@ export class FilterConsumablesDto extends PartialType(PaginationDto) {
 
   @IsOptional()
   @IsString()
-  readonly description: string;
-
-  @IsOptional()
-  @IsString()
   readonly totalValue: string;
-
-  @IsOptional()
-  @IsString()
-  readonly unitValue: string;
 }

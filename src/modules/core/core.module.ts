@@ -1,18 +1,14 @@
 import { Global, Module } from '@nestjs/common';
 import {
-  AssetDetailsController,
-  AssetsController,
+  AreaController,
   CataloguesController,
   CatalogueTypesController,
-  ConsumablesController,
   MaterialsController,
 } from '@core/controllers';
 import {
-  AssetDetailsService,
-  AssetsService,
+  AreaService,
   CataloguesService,
   CatalogueTypesService,
-  ConsumablesService,
   MaterialsService,
 } from '@core/services';
 import { DatabaseModule } from '@database';
@@ -22,29 +18,23 @@ import { coreProviders } from '@core/providers';
 @Module({
   imports: [DatabaseModule],
   controllers: [
-    AssetDetailsController,
-    AssetsController,
+    AreaController,
     CatalogueTypesController,
     CataloguesController,
-    ConsumablesController,
     MaterialsController,
   ],
   providers: [
     ...coreProviders,
-    AssetDetailsService,
-    AssetsService,
+    AreaService,
     CatalogueTypesService,
     CataloguesService,
-    ConsumablesService,
     MaterialsService,
   ],
   exports: [
     ...coreProviders,
-    AssetDetailsService,
-    AssetsService,
+    AreaService,
     CatalogueTypesService,
     CataloguesService,
-    ConsumablesService,
     MaterialsService,
   ],
 })

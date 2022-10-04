@@ -1,10 +1,8 @@
 import { DataSource } from 'typeorm';
 import {
-  AssetDetailEntity,
-  AssetEntity,
+  AreaEntity,
   CatalogueEntity,
   CatalogueTypeEntity,
-  ConsumableEntity,
   MaterialEntity,
 } from '@core/entities';
 import { DataSourceEnum, RepositoryEnum } from '@shared/enums';
@@ -18,15 +16,9 @@ export const coreProviders = [
     inject: [DataSourceEnum.PG_DATA_SOURCE],
   },
   {
-    provide: RepositoryEnum.ASSET_DETAIL_REPOSITORY,
+    provide: RepositoryEnum.AREA_REPOSITORY,
     useFactory: (dataSource: DataSource) =>
-      dataSource.getRepository(AssetDetailEntity),
-    inject: [DataSourceEnum.PG_DATA_SOURCE],
-  },
-  {
-    provide: RepositoryEnum.ASSET_REPOSITORY,
-    useFactory: (dataSource: DataSource) =>
-      dataSource.getRepository(AssetEntity),
+      dataSource.getRepository(AreaEntity),
     inject: [DataSourceEnum.PG_DATA_SOURCE],
   },
   {
@@ -39,12 +31,6 @@ export const coreProviders = [
     provide: RepositoryEnum.CATALOGUE_REPOSITORY,
     useFactory: (dataSource: DataSource) =>
       dataSource.getRepository(CatalogueEntity),
-    inject: [DataSourceEnum.PG_DATA_SOURCE],
-  },
-  {
-    provide: RepositoryEnum.CONSUMABLES_REPOSITORY,
-    useFactory: (dataSource: DataSource) =>
-      dataSource.getRepository(ConsumableEntity),
     inject: [DataSourceEnum.PG_DATA_SOURCE],
   },
   {

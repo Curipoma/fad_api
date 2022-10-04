@@ -10,7 +10,6 @@ import { CatalogueEntity } from '@core/entities';
 import { RepositoryEnum } from '@shared/enums';
 import { ServiceResponseHttpModel } from '@shared/models';
 import { CatalogueTypesService } from './catalogue-types.service';
-import { TableNames } from '@auth/enums';
 
 @Injectable()
 export class CataloguesService {
@@ -19,12 +18,6 @@ export class CataloguesService {
     private repository: Repository<CatalogueEntity>,
     private catalogueTypesService: CatalogueTypesService,
   ) {}
-
-  async truncateTable() {
-    await this.repository.query(
-      `TRUNCATE core.${TableNames.CATALOGUES} RESTART IDENTITY CASCADE;`,
-    );
-  }
 
   async create(
     payload: CreateCatalogueDto,
