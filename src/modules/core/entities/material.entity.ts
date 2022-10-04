@@ -51,7 +51,7 @@ export class MaterialEntity {
       referencedColumnName: 'id',
     },
   })
-  readonly areas: AreaEntity[];
+  areas: AreaEntity[];
 
   @Column('varchar', {
     name: 'description',

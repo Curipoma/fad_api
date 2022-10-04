@@ -71,14 +71,6 @@ export class UserEntity {
   })
   passwordChanged: boolean;
 
-  @Column('varchar', {
-    name: 'phone',
-    length: 20,
-    nullable: true,
-    comment: 'Teléfono',
-  })
-  phone: string;
-
   @Exclude()
   @Column('int', {
     name: 'max_attempts',

@@ -29,6 +29,15 @@ export class MaterialsService {
     return { data: materialCreated };
   }
 
+  async findAllByIds(
+    payload: MaterialEntity[],
+  ): Promise<ServiceResponseHttpModel<MaterialEntity[]>> {
+    const data = await this.repository.findAndCountBy({
+      id: In(payload),
+    });
+    return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
+  }
+
   async findAll(
     params: FilterMaterialsDto,
   ): Promise<ServiceResponseHttpModel<MaterialEntity[]>> {
@@ -36,14 +45,14 @@ export class MaterialsService {
       return await this.paginateAndFilter(params);
     }
 
-    const data = await this.repository.findAndCount({ relations: [] });
+    const data = await this.repository.findAndCount({ relations: ['areas'] });
 
     return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 
   async findOne(id: number): Promise<ServiceResponseHttpModel<MaterialEntity>> {
     const material = await this.repository.findOne({
-      relations: [],
+      relations: ['areas'],
       where: { id },
     });
 
@@ -121,7 +130,7 @@ export class MaterialsService {
     }
 
     const data = await this.repository.findAndCount({
-      relations: [],
+      relations: ['areas'],
       where,
       take: limit,
       skip: PaginationDto.getOffset(limit, page),
