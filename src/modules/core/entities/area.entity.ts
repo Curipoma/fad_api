@@ -3,21 +3,17 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
-import {
-  AssetDetailEntity,
-  CatalogueEntity,
-  ConsumableEntity,
-} from '@core/entities';
+import { MaterialEntity } from '@core/entities';
+import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 
-@Entity(TableNames.ASSETS, { schema: 'core' })
-export class AssetEntity {
+@Entity(TableNames.AREAS, { schema: 'core' })
+export class AreaEntity {
+  @ApiModelProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -42,29 +38,34 @@ export class AssetEntity {
   })
   deletedAt: Date;
 
-  @OneToMany(() => AssetDetailEntity, (assetDetails) => assetDetails.asset)
-  @JoinColumn({ name: 'asset_details_id' })
-  assetDetails: AssetDetailEntity[];
+  @ManyToMany(() => MaterialEntity, (material) => material.areas)
+  materials: MaterialEntity[];
 
-  @OneToMany(() => ConsumableEntity, (consumable) => consumable.asset)
-  @JoinColumn({ name: 'asset_details_id' })
-  consumables: ConsumableEntity[];
+  @Column('varchar', {
+    name: 'name',
+    length: 255,
+    comment: 'nombre de una área',
+  })
+  readonly name: string;
 
-  @ManyToOne(() => CatalogueEntity, (catalogue) => catalogue.assetType)
-  @JoinColumn({ name: 'type_id' })
-  type: CatalogueEntity;
+  @Column('varchar', {
+    name: 'unit_monetary_value',
+    length: 255,
+    comment: 'valor unitario del área',
+  })
+  readonly unitMonetaryValue: string;
 
   @Column('varchar', {
     name: 'code',
     length: 255,
-    comment: 'código que identifica al activo',
+    comment: 'código que identifica al área',
   })
-  code: string;
+  readonly code: string;
 
   @Column('varchar', {
     name: 'monetary_value',
     length: 255,
     comment: 'monto de valoración monetario',
   })
-  monetaryValue: string;
+  readonly totalMonetaryValue: string;
 }

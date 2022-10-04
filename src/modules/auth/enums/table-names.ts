@@ -1,9 +1,7 @@
 export enum TableNames {
-  ASSETS =  'assets',
-  ASSET_DETAILS = 'asset_details',
+  AREAS = 'areas',
   CATALOGUES = 'catalogues',
   CATALOGUE_TYPES = 'catalogue_types',
-  CONSUMABLES = 'consumables',
   MATERIALS = 'materials',
   USERS = 'users',
 }

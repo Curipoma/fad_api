@@ -1,33 +1,62 @@
-import {
-  IsDate,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
-import { CatalogueEntity, ConsumableEntity } from '@core/entities';
+import { IsString, MaxLength, MinLength } from 'class-validator';
+import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 export class CreateMaterialsDto {
-  @IsNotEmpty({ message: 'consumables must be a objects' })
-  @IsOptional()
-  readonly consumables: ConsumableEntity[];
+  @ApiModelProperty({})
+  @IsString({ message: 'code, debe ser un string' })
+  @MinLength(1, { message: 'code, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'code, maximo 255 caracteres' })
+  readonly description: string;
 
-  @IsNotEmpty({ message: 'type must be a object' })
-  readonly type: CatalogueEntity;
+  @ApiModelProperty({})
+  @IsString({ message: 'initialExistence, debe ser un string' })
+  @MinLength(1, { message: 'initialExistence, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'initialExistence, maximo 255 caracteres' })
+  readonly initialExistence: string;
 
-  @IsString({ message: 'code, Debe ser un string' })
-  @MinLength(1, { message: 'code, El número de caracteres mínimo es 3.' })
-  @MaxLength(255, { message: 'code, Maximo 255 caracteres' })
+  @ApiModelProperty({})
+  @IsString({ message: 'annualExistence, debe ser un string' })
+  @MinLength(1, { message: 'annualExistence, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'annualExistence, maximo 255 caracteres' })
+  readonly annualExistence: string;
+
+  @ApiModelProperty({})
+  @IsString({ message: 'unitValue debe ser un string' })
+  @MinLength(1, { message: 'unitValue, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'unitValue, maximo 255 caracteres' })
+  readonly unitValue: string;
+
+  @ApiModelProperty({})
+  @IsString({ message: 'totalValue, debe ser un string' })
+  @MinLength(1, { message: 'totalValue, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'totalValue, maximo 255 caracteres' })
+  readonly totalValue: string;
+
+  @ApiModelProperty({})
+  @IsString({ message: 'code, debe ser un string' })
+  @MinLength(1, { message: 'code, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'code, maximo 255 caracteres' })
   readonly code: string;
 
-  @IsString({ message: 'name, Debe ser un string' })
-  @MinLength(1, { message: 'name, El número de caracteres mínimo es 3.' })
-  @MaxLength(255, { message: 'name, Maximo 255 caracteres' })
-  readonly name: string;
+  @ApiModelProperty({})
+  @IsString({ message: 'amount, debe ser un string' })
+  @MinLength(1, { message: 'amount, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'amount, maximo 255 caracteres' })
+  readonly amount: string;
 
-  @IsDate({
-    message: 'purchasedAt, debe ser una fecha, YYYY-MM-DDThh:mm:ssTZD',
+  @ApiModelProperty({})
+  @IsString({ message: 'fullAmountValue, debe ser un string' })
+  @MinLength(1, {
+    message: 'fullAmountValue, mínimo 3 caracteres',
   })
-  readonly purchasedAt: Date;
+  @MaxLength(255, { message: 'fullAmountValue, maximo 255 caracteres' })
+  readonly fullAmountValue: string;
+
+  @ApiModelProperty({})
+  @IsString({ message: 'unitQuantityValue, debe ser un string' })
+  @MinLength(1, {
+    message: 'unitQuantityValue, mínimo 3 caracteres',
+  })
+  @MaxLength(255, { message: 'unitQuantityValue, maximo 255 caracteres' })
+  readonly unitQuantityValue: string;
 }

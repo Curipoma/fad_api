@@ -1,12 +1,17 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
-import { CatalogueTypeEntity } from "@core/entities";
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { CatalogueTypeEntity } from '@core/entities';
+import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 
 export class CreateCatalogueDto {
-  @IsNotEmpty({ message: 'type, must be a object CatalogueTypeEntity' })
+  @ApiModelProperty({})
+  @IsNotEmpty({
+    message: 'type, debe ser un objeto de tipo CatalogueTypeEntity',
+  })
   readonly type: CatalogueTypeEntity;
 
-  @IsString({ message: 'name, Debe ser un string' })
-  @MinLength(1, { message: 'name, El número de caracteres mínimo es 3.' })
-  @MaxLength(255, { message: 'name, Maximo 255 caracteres' })
+  @ApiModelProperty({})
+  @IsString({ message: 'name, debe ser un string' })
+  @MinLength(1, { message: 'name, mínimo 3 caracteres' })
+  @MaxLength(255, { message: 'name, maximo 255 caracteres' })
   readonly name: string;
 }

@@ -5,19 +5,16 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
-import {
-  AssetEntity,
-  CatalogueTypeEntity,
-  MaterialEntity,
-} from '@core/entities';
+import { CatalogueTypeEntity } from '@core/entities';
+import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 
 @Entity(TableNames.CATALOGUES, { schema: 'core' })
 export class CatalogueEntity {
+  @ApiModelProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -41,14 +38,6 @@ export class CatalogueEntity {
     nullable: true,
   })
   deletedAt: Date;
-
-  @OneToMany(() => AssetEntity, (asset) => asset.type)
-  @JoinColumn({ name: 'asset_type_id' })
-  assetType: AssetEntity[];
-
-  @OneToMany(() => MaterialEntity, (material) => material.type)
-  @JoinColumn({ name: 'material_type_id' })
-  materialType: MaterialEntity[];
 
   @ManyToOne(
     () => CatalogueTypeEntity,

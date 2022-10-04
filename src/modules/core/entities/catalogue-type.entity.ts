@@ -9,10 +9,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
-import { CatalogueEntity } from './catalogue.entity';
+import { CatalogueEntity } from '@core/entities';
+import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
 
 @Entity(TableNames.CATALOGUE_TYPES, { schema: 'core' })
 export class CatalogueTypeEntity {
+  @ApiModelProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -45,7 +47,15 @@ export class CatalogueTypeEntity {
     name: 'name',
     length: 255,
     default: 'SN',
-    comment: 'Nombre del producto',
+    comment: 'Nombre del tipo de catalogo',
   })
   name: string;
+
+  @Column('varchar', {
+    name: 'value',
+    length: 255,
+    default: 'SN',
+    comment: 'Valor del tipo de catalogo',
+  })
+  value: string;
 }

@@ -24,10 +24,6 @@ export class MaterialsService {
   ): Promise<ServiceResponseHttpModel<MaterialEntity>> {
     const newMaterial = await this.repository.create(payload);
 
-    await this.cataloguesService.findOne(payload.type.id).then((res) => {
-      newMaterial.type = res.data;
-    });
-
     const materialCreated = await this.repository.save(newMaterial);
 
     return { data: materialCreated };
@@ -40,14 +36,14 @@ export class MaterialsService {
       return await this.paginateAndFilter(params);
     }
 
-    const data = await this.repository.findAndCount({ relations: ['type'] });
+    const data = await this.repository.findAndCount({ relations: [] });
 
     return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 
   async findOne(id: number): Promise<ServiceResponseHttpModel<MaterialEntity>> {
     const material = await this.repository.findOne({
-      relations: ['type'],
+      relations: [],
       where: { id },
     });
 
@@ -113,12 +109,19 @@ export class MaterialsService {
       page = 0;
       where = [];
 
-      where.push({ code: ILike(`%${search}%`) });
-      where.push({ name: ILike(`%${search}%`) });
+      where.push({ description: ILike(`${search}`) });
+      where.push({ initialExistence: ILike(`${search}`) });
+      where.push({ annualExistence: ILike(`${search}`) });
+      where.push({ unitValue: ILike(`${search}`) });
+      where.push({ totalValue: ILike(`${search}`) });
+      where.push({ code: ILike(`${search}`) });
+      where.push({ amount: ILike(`${search}`) });
+      where.push({ fullAmountValue: ILike(`${search}`) });
+      where.push({ unitQuantityValue: ILike(`${search}`) });
     }
 
     const data = await this.repository.findAndCount({
-      relations: ['type'],
+      relations: [],
       where,
       take: limit,
       skip: PaginationDto.getOffset(limit, page),
