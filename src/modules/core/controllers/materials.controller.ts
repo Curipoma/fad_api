@@ -21,8 +21,10 @@ import {
 } from '@core/dto';
 import { ResponseHttpModel } from '@shared/models';
 import { MaterialEntity } from '@core/entities';
+import { Auth } from '@auth/decorators';
 
 @ApiTags('Materials')
+@Auth()
 @Controller('materials')
 export class MaterialsController {
   constructor(private materialsService: MaterialsService) {}

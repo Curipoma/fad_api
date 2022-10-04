@@ -17,9 +17,11 @@ import { AreaService } from '@core/services';
 import { CreateAreasDto, FilterAreasDto, UpdateAreaDto } from '@core/dto';
 import { ResponseHttpModel } from '@shared/models';
 import { AreaEntity } from '@core/entities';
+import { Auth } from '@auth/decorators';
 
 @ApiTags('Area')
-@Controller('area')
+@Auth()
+@Controller('areas')
 export class AreaController {
   constructor(private areaService: AreaService) {}
 
@@ -95,7 +97,7 @@ export class AreaController {
 
     return {
       data,
-      message: `Removed, area s${id}`,
+      message: `Removed, area ${id}`,
       title: `Removed`,
     };
   }

@@ -9,20 +9,24 @@ import {
   UpdateAreaDto,
 } from '@core/dto';
 import { ServiceResponseHttpModel } from '@shared/models';
-import { CataloguesService } from './catalogues.service';
+import { MaterialsService } from './materials.service';
 
 @Injectable()
 export class AreaService {
   constructor(
     @Inject(RepositoryEnum.AREA_REPOSITORY)
     private repository: Repository<AreaEntity>,
-    private cataloguesService: CataloguesService,
+    private materialsService: MaterialsService,
   ) {}
 
   async create(
     payload: CreateAreasDto,
   ): Promise<ServiceResponseHttpModel<AreaEntity>> {
     const newArea = await this.repository.create(payload);
+
+    newArea.materials = await this.materialsService
+      .findAllByIds(payload.materials)
+      .then((response) => response.data);
 
     const areaCreated = await this.repository.save(newArea);
 
@@ -36,14 +40,16 @@ export class AreaService {
       return await this.paginateAndFilter(params);
     }
 
-    const data = await this.repository.findAndCount({ relations: [] });
+    const data = await this.repository.findAndCount({
+      relations: ['materials'],
+    });
 
     return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 
   async findOne(id: number): Promise<ServiceResponseHttpModel<AreaEntity>> {
     const area = await this.repository.findOne({
-      relations: [],
+      relations: ['materials'],
       where: { id },
     });
 
@@ -107,14 +113,14 @@ export class AreaService {
       page = 0;
       where = [];
 
-      where.push({name: ILike(`${search}`)});
-      where.push({unitMonetaryValue: ILike(`${search}`)});
-      where.push({code: ILike(`${search}`)});
-      where.push({totalMonetaryValue: ILike(`${search}`)});
+      where.push({ name: ILike(`${search}`) });
+      where.push({ unitMonetaryValue: ILike(`${search}`) });
+      where.push({ code: ILike(`${search}`) });
+      where.push({ totalMonetaryValue: ILike(`${search}`) });
     }
 
     const data = await this.repository.findAndCount({
-      relations: ['type'],
+      relations: ['materials'],
       where,
       take: limit,
       skip: PaginationDto.getOffset(limit, page),
@@ -123,4 +129,3 @@ export class AreaService {
     return { data: data[0], pagination: { limit, totalItems: data[1] } };
   }
 }
-

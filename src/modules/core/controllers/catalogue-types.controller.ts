@@ -21,8 +21,10 @@ import {
 } from '@core/dto';
 import { ResponseHttpModel } from '@shared/models';
 import { CatalogueTypeEntity } from '@core/entities';
+import { Auth } from "@auth/decorators";
 
 @ApiTags('Catalogue Types')
+@Auth()
 @Controller('catalogue-types')
 export class CatalogueTypesController {
   constructor(private catalogueTypesService: CatalogueTypesService) {}
