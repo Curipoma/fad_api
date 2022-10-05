@@ -124,9 +124,6 @@ export class MaterialsService {
       where.push({ unitValue: ILike(`${search}`) });
       where.push({ totalValue: ILike(`${search}`) });
       where.push({ code: ILike(`${search}`) });
-      where.push({ amount: ILike(`${search}`) });
-      where.push({ fullAmountValue: ILike(`${search}`) });
-      where.push({ unitQuantityValue: ILike(`${search}`) });
     }
 
     const data = await this.repository.findAndCount({

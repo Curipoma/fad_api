@@ -116,7 +116,6 @@ export class AreaService {
       where.push({ name: ILike(`${search}`) });
       where.push({ unitMonetaryValue: ILike(`${search}`) });
       where.push({ code: ILike(`${search}`) });
-      where.push({ totalMonetaryValue: ILike(`${search}`) });
     }
 
     const data = await this.repository.findAndCount({

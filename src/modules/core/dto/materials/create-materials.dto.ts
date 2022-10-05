@@ -37,26 +37,4 @@ export class CreateMaterialsDto {
   @MinLength(1, { message: 'code, mínimo 3 caracteres' })
   @MaxLength(255, { message: 'code, maximo 255 caracteres' })
   readonly code: string;
-
-  @ApiModelProperty({})
-  @IsString({ message: 'amount, debe ser un string' })
-  @MinLength(1, { message: 'amount, mínimo 3 caracteres' })
-  @MaxLength(255, { message: 'amount, maximo 255 caracteres' })
-  readonly amount: string;
-
-  @ApiModelProperty({})
-  @IsString({ message: 'fullAmountValue, debe ser un string' })
-  @MinLength(1, {
-    message: 'fullAmountValue, mínimo 3 caracteres',
-  })
-  @MaxLength(255, { message: 'fullAmountValue, maximo 255 caracteres' })
-  readonly fullAmountValue: string;
-
-  @ApiModelProperty({})
-  @IsString({ message: 'unitQuantityValue, debe ser un string' })
-  @MinLength(1, {
-    message: 'unitQuantityValue, mínimo 3 caracteres',
-  })
-  @MaxLength(255, { message: 'unitQuantityValue, maximo 255 caracteres' })
-  readonly unitQuantityValue: string;
 }

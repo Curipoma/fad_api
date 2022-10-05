@@ -3,13 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
-import { AreaEntity } from '@core/entities';
+import { AreaEntity, CatalogueEntity } from '@core/entities';
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 @Entity(TableNames.MATERIALS, { schema: 'core' })
@@ -85,19 +87,4 @@ export class MaterialEntity {
 
   @Column('varchar', { name: 'code', comment: 'código del material' })
   readonly code: string;
-
-  @Column('varchar', { name: 'amount', comment: 'cantidad de ese material' })
-  readonly amount: string;
-
-  @Column('varchar', {
-    name: 'full_amount_value',
-    comment: 'valor total del monto por cantidad',
-  })
-  readonly fullAmountValue: string;
-
-  @Column('varchar', {
-    name: 'unit_quantity_value',
-    comment: 'valor total solo de valores unitarios',
-  })
-  readonly unitQuantityValue: string;
 }

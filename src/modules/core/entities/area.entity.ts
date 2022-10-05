@@ -61,11 +61,4 @@ export class AreaEntity {
     comment: 'código que identifica al área',
   })
   readonly code: string;
-
-  @Column('varchar', {
-    name: 'monetary_value',
-    length: 255,
-    comment: 'monto de valoración monetario',
-  })
-  readonly totalMonetaryValue: string;
 }
