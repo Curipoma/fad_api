@@ -85,19 +85,4 @@ export class MaterialEntity {
 
   @Column('varchar', { name: 'code', comment: 'código del material' })
   readonly code: string;
-
-  @Column('varchar', { name: 'amount', comment: 'cantidad de ese material' })
-  readonly amount: string;
-
-  @Column('varchar', {
-    name: 'full_amount_value',
-    comment: 'valor total del monto por cantidad',
-  })
-  readonly fullAmountValue: string;
-
-  @Column('varchar', {
-    name: 'unit_quantity_value',
-    comment: 'valor total solo de valores unitarios',
-  })
-  readonly unitQuantityValue: string;
 }

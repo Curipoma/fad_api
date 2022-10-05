@@ -24,20 +24,18 @@ import { coreProviders } from '@core/providers';
     MaterialsController,
   ],
   providers: [
-    ...coreProviders,
     AreaService,
     CatalogueTypesService,
     CataloguesService,
     MaterialsService,
+    ...coreProviders,
   ],
   exports: [
-    ...coreProviders,
     AreaService,
     CatalogueTypesService,
     CataloguesService,
     MaterialsService,
+    ...coreProviders,
   ],
 })
 export class CoreModule {}
-
-// todo agregar la asignación de fk en cada servicio =< luego probar

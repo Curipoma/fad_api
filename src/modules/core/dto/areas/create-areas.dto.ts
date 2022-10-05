@@ -5,7 +5,7 @@ import { MaterialEntity } from '@core/entities';
 export class CreateAreasDto {
   @ApiModelProperty({ type: 'number[]' })
   @IsNotEmpty({
-    message: 'materials, debe ser un objeto de tipo MaterialEntity',
+    message: 'materials, debe ser una lista de objetos de tipo MaterialEntity',
   })
   materials: MaterialEntity[];
 
@@ -26,10 +26,4 @@ export class CreateAreasDto {
   @MinLength(1, { message: 'code, El número de caracteres mínimo es 3.' })
   @MaxLength(255, { message: 'code, Maximo 255 caracteres' })
   readonly code: string;
-
-  @ApiModelProperty()
-  @IsString({ message: 'totalValue debe ser un string' })
-  @MinLength(1, { message: 'totalValue, El número de caracteres mínimo es 3.' })
-  @MaxLength(255, { message: 'totalValue, Maximo 255 caracteres' })
-  readonly totalMonetaryValue: string;
 }

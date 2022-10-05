@@ -9,7 +9,7 @@ import {
   UpdateAreaDto,
 } from '@core/dto';
 import { ServiceResponseHttpModel } from '@shared/models';
-import { MaterialsService } from './materials.service';
+import { MaterialsService } from '@core/services';
 
 @Injectable()
 export class AreaService {
@@ -70,6 +70,10 @@ export class AreaService {
       throw new NotFoundException('area not found');
     }
 
+    area.materials = await this.materialsService
+      .findAllByIds(payload.materials)
+      .then((response) => response.data);
+
     await this.repository.merge(area, payload);
     const areaUpdated = await this.repository.save(area);
 
@@ -116,7 +120,6 @@ export class AreaService {
       where.push({ name: ILike(`${search}`) });
       where.push({ unitMonetaryValue: ILike(`${search}`) });
       where.push({ code: ILike(`${search}`) });
-      where.push({ totalMonetaryValue: ILike(`${search}`) });
     }
 
     const data = await this.repository.findAndCount({
@@ -127,5 +130,14 @@ export class AreaService {
     });
 
     return { data: data[0], pagination: { limit, totalItems: data[1] } };
+  }
+
+  async findAllByIds(
+    payload: AreaEntity[],
+  ): Promise<ServiceResponseHttpModel<AreaEntity[]>> {
+    const data = await this.repository.findAndCountBy({
+      id: In(payload),
+    });
+    return { data: data[0], pagination: { totalItems: data[1], limit: 10 } };
   }
 }

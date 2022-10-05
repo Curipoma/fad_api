@@ -9,14 +9,12 @@ import {
   UpdateMaterialsDto,
 } from '@core/dto';
 import { ServiceResponseHttpModel } from '@shared/models';
-import { CataloguesService } from './catalogues.service';
 
 @Injectable()
 export class MaterialsService {
   constructor(
     @Inject(RepositoryEnum.MATERIAL_REPOSITORY)
     private repository: Repository<MaterialEntity>,
-    private cataloguesService: CataloguesService,
   ) {}
 
   async create(
@@ -124,9 +122,6 @@ export class MaterialsService {
       where.push({ unitValue: ILike(`${search}`) });
       where.push({ totalValue: ILike(`${search}`) });
       where.push({ code: ILike(`${search}`) });
-      where.push({ amount: ILike(`${search}`) });
-      where.push({ fullAmountValue: ILike(`${search}`) });
-      where.push({ unitQuantityValue: ILike(`${search}`) });
     }
 
     const data = await this.repository.findAndCount({

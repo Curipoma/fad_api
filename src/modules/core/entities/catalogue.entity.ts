@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
 import { CatalogueTypeEntity } from '@core/entities';
-import { ApiModelProperty } from "@nestjs/swagger/dist/decorators/api-model-property.decorator";
+import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 @Entity(TableNames.CATALOGUES, { schema: 'core' })
 export class CatalogueEntity {
