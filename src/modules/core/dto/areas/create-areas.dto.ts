@@ -5,7 +5,7 @@ import { MaterialEntity } from '@core/entities';
 export class CreateAreasDto {
   @ApiModelProperty({ type: 'number[]' })
   @IsNotEmpty({
-    message: 'materials, debe ser un objeto de tipo MaterialEntity',
+    message: 'materials, debe ser una lista de objetos de tipo MaterialEntity',
   })
   materials: MaterialEntity[];
 

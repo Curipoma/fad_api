@@ -9,14 +9,12 @@ import {
   UpdateMaterialsDto,
 } from '@core/dto';
 import { ServiceResponseHttpModel } from '@shared/models';
-import { CataloguesService } from './catalogues.service';
 
 @Injectable()
 export class MaterialsService {
   constructor(
     @Inject(RepositoryEnum.MATERIAL_REPOSITORY)
     private repository: Repository<MaterialEntity>,
-    private cataloguesService: CataloguesService,
   ) {}
 
   async create(

@@ -24,7 +24,7 @@ export class CataloguesService {
   ): Promise<ServiceResponseHttpModel<CatalogueEntity>> {
     const newCatalogue = await this.repository.create(payload);
 
-    this.catalogueTypesService.findOne(payload.type.id).then((res) => {
+    await this.catalogueTypesService.findOne(payload.type.id).then((res) => {
       newCatalogue.type = res.data;
     });
 

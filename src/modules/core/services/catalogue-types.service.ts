@@ -18,12 +18,6 @@ export class CatalogueTypesService {
     private repository: Repository<CatalogueTypeEntity>,
   ) {}
 
-  async truncateTable() {
-    await this.repository.query(
-      `TRUNCATE core.${TableNames.CATALOGUE_TYPES} RESTART IDENTITY CASCADE;`,
-    );
-  }
-
   async create(
     payload: CreateCatalogueTypesDto,
   ): Promise<ServiceResponseHttpModel<CatalogueTypeEntity>> {

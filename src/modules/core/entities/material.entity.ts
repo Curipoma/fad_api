@@ -3,15 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
-import { AreaEntity, CatalogueEntity } from '@core/entities';
+import { AreaEntity } from '@core/entities';
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 @Entity(TableNames.MATERIALS, { schema: 'core' })

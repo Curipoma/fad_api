@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TableNames } from '@auth/enums';
-import { AreaEntity, CatalogueTypeEntity } from '@core/entities';
+import { CatalogueTypeEntity } from '@core/entities';
 import { ApiModelProperty } from '@nestjs/swagger/dist/decorators/api-model-property.decorator';
 
 @Entity(TableNames.CATALOGUES, { schema: 'core' })
